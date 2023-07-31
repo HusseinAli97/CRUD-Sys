@@ -138,7 +138,7 @@ var pManger = {
                         iconColor: '#9122f3',
                         timer: 1500
                     });
-                }else {
+                } else {
                     Swal.fire({
                         title: 'Error!',
                         text: 'There is no products to delete',
