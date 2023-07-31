@@ -9,7 +9,8 @@
     <!-- LINK - MAIN Fonts  -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600&family=Mochiy+Pop+One&display=swap" rel="stylesheet">    <!-- LINK - MAIN FontAwesome - FILE  -->
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600&family=Mochiy+Pop+One&display=swap"
+        rel="stylesheet"> <!-- LINK - MAIN FontAwesome - FILE  -->
     <link rel="stylesheet" href="css/all.min.css">
     <!-- LINK - MAIN BOOTSTRAP - FILE -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -22,17 +23,18 @@
         <div class="row ">
             <div class="col-md-6 mb-4 text-start rounded-3">
                 <label for="productName" class="mb-2 fw-bold">Product Name</label>
-                <input type="text" name="productName"  class="form-control bg-black bg-opacity-50 text-white" oninput="pManger.validation()"
-                    id="productName">
+                <input type="text" name="productName" class="form-control bg-black bg-opacity-50 text-white"
+                    oninput="pManger.validation()" id="productName">
             </div>
             <div class="col-md-6 mb-4 text-start rounded-3">
                 <label for="productPrice" class="mb-2 fw-bold">Product Price</label>
-                <input type="number" name="productPrice" class="form-control bg-black bg-opacity-50 text-white" oninput="pManger.validation()"
-                    id="productPrice">
+                <input type="number" name="productPrice" class="form-control bg-black bg-opacity-50 text-white"
+                    oninput="pManger.validation()" id="productPrice">
             </div>
             <div class="col-md-12 mb-4 text-start rounded-3">
                 <label for="productCat" class="mb-2 fw-bold">Product Category</label>
-                <select name="productCat" class="form-select bg-black bg-opacity-50 text-white" id="productCat" oninput="pManger.validation()">
+                <select name="productCat" class="form-select bg-black bg-opacity-50 text-white" id="productCat"
+                    oninput="pManger.validation()">
                     <option disabled selected value="Select Category"> Select Category</option>
                     <optgroup label="Iphone" class="fw-bold text-uppercase">
                         <option value="12 pro max" class="fw-bold text-uppercase"> 12 pro max </option>
@@ -54,7 +56,8 @@
             <div class="col-md-6">
                 <div class="search mb-5 text-start fs-5">
                     <label for="search" class="mb-2 fw-bold text-crimson">Search</label>
-                    <input type="text" class="form-control bg-black bg-opacity-50 text-white" id="search" oninput="pManger.searchProducts(this.value)">
+                    <input type="text" class="form-control bg-black bg-opacity-50 text-white" id="search"
+                        oninput="pManger.searchProducts(this.value)">
                 </div>
             </div>
             <div class="d-flex justify-content-end mt-5 col-md-6 Btns ">
@@ -71,7 +74,8 @@
                     </button>
                 </div>
                 <div class=" text-nowrap" title="Delete Selected Product">
-                    <button type="submit" class="btn btn-all btnNum3  rounded-circle fw-bold text-uppercase py-2 disabled"
+                    <button type="submit"
+                        class="btn btn-all btnNum3  rounded-circle fw-bold text-uppercase py-2 disabled"
                         id="delSelectBtn" onclick="pManger.delSelectedProducts()">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -95,6 +99,7 @@
                             <th scope="col">Product Price</th>
                             <th scope="col">Product Category</th>
                             <th scope="col">Product Description</th>
+                            <th scope="col">Last Update</th>
                             <th scope="col">Update</th>
                             <th scope="col">Delete</th>
                         </tr>
@@ -106,6 +111,7 @@
         </div>
     </div>
     <!-- SCRIPT - MAIN JS - FILE -->
+    <script src="Js/moment.js""></script>
     <script src="Js/bootstrap.min.js"></script>
     <script src="Js/main.js"></script>
 </html>

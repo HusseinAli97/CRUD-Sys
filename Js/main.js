@@ -1,7 +1,6 @@
 //! ***********************************Enhanced Code ********************************
 //? Encapsulate all the functions and Variables
 var pManger = {
-
     // ! ***********************************Add Products**********************************************
     productName: document.getElementById("productName"),
     productPrice: document.getElementById("productPrice"),
@@ -14,7 +13,6 @@ var pManger = {
     checkedList: [],
     indexing: 0,
     //! ***********************************functions*******************************************
-
     //? check if there is a local storage for the localStorageName or not  set local storage for the product
     invokedLocal: function () {
         if (localStorage.getItem(this.localStorageName) !== null) {
@@ -31,7 +29,6 @@ var pManger = {
 
     //! ***********************************Add Products************************************************
     //? create a function to add products and object to pList and add them to local storage
-
     addProducts: function () {
         //? check Validation before adding products
         if (this.validation()) {
@@ -39,7 +36,8 @@ var pManger = {
                 pName: this.productName.value,
                 pPrice: this.productPrice.value,
                 pCategory: this.productCategory.value,
-                pDescription: this.productDescription.value
+                pDescription: this.productDescription.value,
+                pLastUpdate: this.currentMoment()
             }
             this.pList.push(products);
             this.addProductStorage(this.pList);
@@ -49,14 +47,11 @@ var pManger = {
         } else {
             alert("Please fill all the fields With right Values");
         }
-        
     },
-
     //! ***********************************Show Products*********************************************
     //? show products from local storage inside table in html
     showProducts: function (pShow) {
         var content = "";
-        console.log(this.pList)
         for (var i = 0; i < pShow.length; i++) {
             content += `
                 <tr>
@@ -66,6 +61,7 @@ var pManger = {
                     <td class="text-white fw-bold" >${pShow[i].pPrice}</td>
                     <td class="text-white fw-bold" >${pShow[i].pCategory}</td>
                     <td class="text-white fw-bold" >${pShow[i].pDescription}</td>
+                    <td class="text-white fw-bold" >${pShow[i].pLastUpdate}</td>
                     <td > <button class="btn btn-warning btn-sm text-uppercase fw-bold"  onclick = "pManger.pullUpdateValue(${i})"><i class="fa-solid fa-pen-to-square"></i></button> </td>
                     <td > <button class="btn btn-danger btn-sm text-uppercase fw-bold " onclick = "pManger.delCurrentProduct(${i})"><i class="fa-solid fa-trash-can"></i></button> </td>
                 </tr>
@@ -86,7 +82,7 @@ var pManger = {
         var delConfirmation = window.confirm('Are you sure you want Delete All Products ?');
         if (delConfirmation) {
             localStorage.clear();
-            this.pList = []; // Use 'this.pList' instead of 'pList'
+            this.pList = [];
             this.showProducts(this.pList);
         }
     },
@@ -134,6 +130,7 @@ var pManger = {
         this.pList[this.indexing].pPrice = this.productPrice.value;
         this.pList[this.indexing].pCategory = this.productCategory.value;
         this.pList[this.indexing].pDescription = this.productDescription.value;
+        this.pList[this.indexing].pLastUpdate = this.currentMoment();
         this.addProductStorage(this.pList);
         this.showProducts(this.pList);
         this.updateInputValue();
@@ -153,7 +150,6 @@ var pManger = {
         }
     },
     //! ***************************Validation for Product****************************
-
     //? check function that receive 2 argument and return true or false & function check if input is empty or not
     checkValidate: function (vValue, regPattern) {
         return regPattern.test(vValue);
@@ -194,6 +190,8 @@ var pManger = {
         this.productPrice.classList.remove('is-valid');
         this.productCategory.classList.remove('is-valid');
         this.productDescription.classList.remove('is-valid');
-        }
+    },
+    //! ***********************************Add Date Of Edit************************************************
+    currentMoment: () => { return moment().format("ddd,DMMMM,h:mmA"); },
 }
 pManger.invokedLocal();
