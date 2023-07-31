@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD</title>
+        <!-- LINK - MAIN FontAwesome - FILE -->
+        <link rel="stylesheet" href="css/all.min.css">
+    <!-- *LINK - MAIN BOOTSTRAP - FILE -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- *LINK - MAIN CSS - FILE -->
+    <link rel="stylesheet" href="css/styleOld.css">
+</head>
+<body class="bg-black">
+    <button class="btn btn-lg btn-danger mt-5">
+        <a href="../index.html" class="text-white text-decoration-none">
+            Enhance Version 1.1 Here
+            <span><i class="fa-solid fa-arrow-right fa-lg fa-beat"></i></span>
+        </a>
+    </button>
+    <div class="container-fluid bg-dark text-crimson text-center rounded-1 mt-3 py-4">
+        <h1 class="fw-bolder text-uppercase text-white">CRUD Operation</h1>
+        <div class="inputs-fields bg-black my-3 px-5 py-3 rounded-3 ">
+            <div class="row mb-5">
+                <div class="col-md12 mb-4 text-start rounded-3">
+                    <label for="productName" class="mb-2 fw-bold">Product Name</label>
+                    <input type="text" name="productName" class="form-control bg-dark text-white" oninput ="Validation()" id="productName">
+                </div>
+                <div class="col-md12 mb-4 text-start rounded-3">
+                    <label for="productPrice" class="mb-2 fw-bold">Product Price</label>
+                    <input type="number" name="productPrice" class="form-control bg-dark text-white" oninput="Validation()"  id="productPrice">
+                </div>
+                <div class="col-md12 mb-4 text-start rounded-3 ">
+                    <label for="productCat" class="mb-2 fw-bold">Product Category</label>
+                    <select name="productCat" class="form-select bg-dark text-white" oninput="Validation()" id="productCat" required>
+                        <option disabled selected   value="Select Category"> Select Category</option>
+                        <optgroup label="Iphone" class="fw-bold text-uppercase">
+                            <option value="12 pro max" class="fw-bold text-uppercase"> 12 pro max </option>
+                            <option value="12 Pro" class="fw-bold text-uppercase"> 12 Pro </option>
+                        </optgroup>
+                        <optgroup label="Samsung" class="fw-bold text-uppercase">
+                            <option value="S1"> S1 </option>
+                            <option value="S2"> S2 </option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="col-md12 mb-4 text-start rounded-3">
+                    <label for="productDesc" class="mb-2  fw-bold">Product Description</label>
+                    <textarea name="productDesc" oninput="Validation()" id="productDesc" style="resize: none;" rows="3"
+                        class="form-control bg-dark text-white"></textarea>
+                </div>
+                <div class="row justify-content-center mt-3">
+
+                    <div class="col-md-3 " id="addBtn">
+                        <button type="submit"  class="btn btn-dark w-100 text-crimson fw-bold text-uppercase py-2" onclick="addProducts()">
+                        Add-Product
+                    </button>
+                </div>
+                <div class="col-md-3 d-none " id="updateBtn">
+                    <button type="submit"  class="btn btn-warning w-100 fw-bold text-uppercase py-2" onclick="editProduct()">
+                        Update List
+                    </button>
+                </div>
+                <div class="col-md-3 ">
+                    <button type="submit" class="btn btn-dark w-100 text-crimson fw-bold text-uppercase py-2 disabled " id="delSelectBtn"  onclick="delCheckedProducts()">
+                        Delete-Selected
+                    </button>
+                </div>
+                <div class="col-md-3 ">
+                    <button type="submit" class="btn btn-dark w-100 text-crimson fw-bold text-uppercase py-2" onclick="delAllProducts()">
+                        Delete-All
+                    </button>
+                </div>
+            </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="search mb-5 text-start fs-5 ">
+                        <label for="search" class="mb-2  fw-bold text-crimson ">Search</label>
+                        <input type="text" class="form-control bg-dark text-white" id="search" oninput="searchProduct(this.value)">
+                    </div>
+                    <table class="table table-dark ">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col" >#</th>
+                                <th scope="col" >Index</th>
+                                <th scope="col" >Product Name</th>
+                                <th scope="col" >Product Price</th>
+                                <th scope="col" >Product Category</th>
+                                <th scope="col" >Product Description</th>
+                                <th scope="col" >Update</th>
+                                <th scope="col" >Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- *ANCHOR - MAIN JS - FILE -->
+    <script src="Js/bootstrap.min.js"></script>
+    <script src="Js/mainOld.js"></script>
+</body>
+
+</html>
