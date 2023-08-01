@@ -181,7 +181,12 @@ var pManger = {
                 cancelButtonText: 'No, cancel!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    productList.splice(indexToDelete, 1);
+                    // Remove the product from both the productList and pList
+                    var deletedProduct = productList.splice(indexToDelete, 1)[0];
+                    var pListIndexToDelete = this.pList.findIndex(product => product.id === id);
+                    if (pListIndexToDelete !== -1) {
+                        this.pList.splice(pListIndexToDelete, 1);
+                    }
                     this.addProductStorage(this.pList);
                     this.searchTermValue = "";
                     document.getElementById('search').value = "";
@@ -202,7 +207,8 @@ var pManger = {
         } else {
             Swal.fire('Product not found.', '', 'error');
         }
-    },
+    }
+    ,
     //? push checked product to new list and delete checked product local storage and send new plist to showProducts
     pushCheckedProduct: function (iterator) {
         let checkedProduct = document.getElementById(`checkBox${iterator}`);
@@ -228,20 +234,20 @@ var pManger = {
             cancelButtonText: 'No, cancel!'
         }).then((result) => {
             if (result.isConfirmed) {
-                let productList = this.foundedItems.length > 0 ? this.foundedItems : this.pList;
-                // ? Remove checked products from the list
+                // Merge both pList and foundedItems arrays to create a unified list
+                let productList = this.foundedItems.length > 0 ? [...this.foundedItems] : [...this.pList];
+                // Remove checked products from the unified productList
                 productList = productList.filter(product => !this.checkedList.includes(product));
-                // ? Update the appropriate list (foundedItems or pList) and save to local storage
+                // If searching, update both pList and foundedItems arrays
                 if (this.foundedItems.length > 0) {
-                    // ? Remove deleted products from the foundedItems array
-                    this.foundedItems = this.foundedItems.filter(product => !this.checkedList.includes(product));
-                    // ? Update the full list (pList) with the new content of foundedItems
-                    this.pList = this.pList.filter(product => !this.checkedList.includes(product));
-                    //  ? Clear newProductName property from pList items
-                    this.pList.forEach(product => delete product.newProductName);
+                    this.pList = productList.filter(product => !product.newProductName);
+                    this.foundedItems = productList.filter(product => product.newProductName);
                 } else {
+                    // If not searching, update only pList array
                     this.pList = productList;
                 }
+                // Clear newProductName property from pList items
+                this.pList.forEach(product => delete product.newProductName);
                 this.searchTermValue = "";
                 document.getElementById('search').value = "";
                 this.searchProducts("");
@@ -265,6 +271,8 @@ var pManger = {
             }
         });
     },
+    
+    
     //! *******************************Update & Edit Product****************************
     //? pull all products values from showProducts and put them in updateInputValue 
     pullUpdateValue: function (currentIndex) {
