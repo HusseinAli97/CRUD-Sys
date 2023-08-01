@@ -86,7 +86,7 @@ var pManger = {
                 <tr>
                     <th> <input type="checkbox" class="form-check-input non-click" id="checkBox${productList[i].id}" oninput="pManger.pushCheckedProduct(${productList[i].id})"> </th>
                     <th class="text-white fw-bold" scope="row "> ${i + 1}</th>
-                    <td class="text-white fw-bold"> ${productName}</td>
+                    <td class="text-white fw-bold">${this.getHighlightedProductName(productName)}</td>
                     <td class="text-white fw-bold">${productList[i].pPrice}</td>
                     <td class="text-white fw-bold">${productList[i].pCategory}</td>
                     <td class="text-white fw-bold">${productList[i].pDescription}</td>
@@ -101,6 +101,13 @@ var pManger = {
             `;
         }
         document.getElementById("tbody").innerHTML = content;
+    },
+    getHighlightedProductName: function (productName) {
+        if (this.searchTermValue !== "") {
+            const regex = new RegExp(this.searchTermValue, "ig");
+            return productName.replace(regex, match => `<span class="text-danger">${match}</span>`);
+        }
+        return productName;
     },
     //! ***********************************Add Update Inputs**********************************************
     updateInputValue: function (inputValue) {
@@ -297,7 +304,7 @@ var pManger = {
                     this.addBtn.classList.replace("d-none", "d-block");
                     this.updateBtn.classList.replace("d-block", "d-none");
                     this.clearValidation();
-                    this.showProducts(this.pList); // Update the table to display all products
+                    this.showProducts(this.pList);
                     this.searchProducts(this.searchTermValue);
                     Swal.fire({
                         title: 'Saved!',
@@ -321,22 +328,28 @@ var pManger = {
     //! ********************************Search for Product**********************************
     //? create a function to search products and highlight it by using regex to crate new object that substring term and replace product name with it and highlight it inside pName
     searchProducts: function (searchTerm) {
-        this.searchTermValue = searchTerm;
+        this.searchTermValue = searchTerm.trim();
         this.foundedItems = [];
-        for (let i = 0; i < this.pList.length; i++) {
-            if (new RegExp(searchTerm, "ig").test(this.pList[i].pName)) {
-                this.pList[i].newProductName = this.pList[i].pName.replace(new RegExp(searchTerm, "i"), '<span class="text-purple">$&</span>');
-                this.foundedItems.push(this.pList[i]);
+
+        if (this.searchTermValue !== "") {
+            for (let i = 0; i < this.pList.length; i++) {
+                if (new RegExp(this.searchTermValue, "ig").test(this.pList[i].pName)) {
+                    this.foundedItems.push(this.pList[i]);
+                }
             }
         }
-        this.showProducts(this.foundedItems);
-        this.foundedItems = [];
+        // ? Check if foundedItems is empty and display "No products found"
+        if (this.foundedItems.length === 0 && this.searchTermValue !== "") {
+            document.getElementById("tbody").innerHTML = `<tr><td colspan="9" class="text-center text-white">No products found</td></tr>`;
+        } else {
+            // ? Call showProducts with the foundedItems array if it's not empty,
+            // ? otherwise show all products from pList
+            this.showProducts(this.foundedItems.length > 0 ? this.foundedItems : this.pList);
+        }
     },
     resetHighlight: function () {
-        for (let i = 0; i < this.pList.length; i++) {
-            delete this.pList[i].newProductName;
-        }
-        this.showProducts(this.foundedItems.length > 0 ? this.foundedItems : this.pList);
+        this.foundedItems = [];
+        this.showProducts(this.pList);
     },
     //! ***************************Validation for Product****************************
     //? check function that receive 2 argument and return true or false & function check if input is empty or not
