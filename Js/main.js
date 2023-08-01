@@ -78,22 +78,24 @@ var pManger = {
     //! ***********************************Show Products*********************************************
     //? show products from local storage inside table in html
     showProducts: function (pShow) {
+        let productList = pShow.length > 0 ? pShow : this.pList;
         let content = "";
-        for (let i = 0; i < pShow.length; i++) {
+        for (let i = 0; i < productList.length; i++) {
+            let productName = productList[i].newProductName ? productList[i].newProductName : productList[i].pName;
             content += `
                 <tr>
-                    <th> <input type="checkbox" class="form-check-input non-click" id ="checkBox${pShow[i].id}" oninput = "pManger.pushCheckedProduct(${pShow[i].id})"> </th>
+                    <th> <input type="checkbox" class="form-check-input non-click" id="checkBox${productList[i].id}" oninput="pManger.pushCheckedProduct(${productList[i].id})"> </th>
                     <th class="text-white fw-bold" scope="row "> ${i + 1}</th>
-                    <td class="text-white fw-bold" > ${pShow[i].newProductName ? pShow[i].newProductName : pShow[i].pName}</td>
-                    <td class="text-white fw-bold" >${pShow[i].pPrice}</td>
-                    <td class="text-white fw-bold" >${pShow[i].pCategory}</td>
-                    <td class="text-white fw-bold" >${pShow[i].pDescription}</td>
-                    <td class="text-white fw-bold" >${pShow[i].pLastUpdate}</td>
-                    <td > <button class="btn btn-warning btn-sm text-uppercase fw-bold"  onclick = "pManger.pullUpdateValue(${pShow[i].id})"><i class="fa-solid fa-pen-to-square"></i></button> </td>
+                    <td class="text-white fw-bold"> ${productName}</td>
+                    <td class="text-white fw-bold">${productList[i].pPrice}</td>
+                    <td class="text-white fw-bold">${productList[i].pCategory}</td>
+                    <td class="text-white fw-bold">${productList[i].pDescription}</td>
+                    <td class="text-white fw-bold">${productList[i].pLastUpdate}</td>
+                    <td> <button class="btn btn-warning btn-sm text-uppercase fw-bold" onclick="pManger.pullUpdateValue(${productList[i].id})"><i class="fa-solid fa-pen-to-square"></i></button> </td>
                     <td>
-                    <button class="btn btn-danger btn-sm text-uppercase fw-bold" onclick="pManger.delCurrentProduct(${pShow[i].id})">
-                    <i class="fa-solid fa-trash-can"></i>
-                </button>
+                        <button class="btn btn-danger btn-sm text-uppercase fw-bold" onclick="pManger.delCurrentProduct(${productList[i].id})">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
                     </td>
                 </tr>
             `;
@@ -155,8 +157,8 @@ var pManger = {
     },
     //? delete current product from local storage and send new plist to showProducts
     delCurrentProduct: function (id) {
-        var indexToDelete = this.pList.findIndex(product => product.id === id);
-        var indexToDeleteF = this.foundedItems.findIndex(product => product.id === id);
+        var productList = this.foundedItems.length > 0 ? this.foundedItems : this.pList;
+        var indexToDelete = productList.findIndex(product => product.id === id);
         if (indexToDelete !== -1) {
             Swal.fire({
                 title: 'Are you sure?',
@@ -172,10 +174,12 @@ var pManger = {
                 cancelButtonText: 'No, cancel!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.pList.splice(indexToDelete, 1);
-                    this.foundedItems.splice(indexToDeleteF, 1);
+                    productList.splice(indexToDelete, 1);
                     this.addProductStorage(this.pList);
-                    this.showProducts(this.foundedItems.length > 0 ? this.foundedItems : this.pList);
+                    this.searchTermValue = "";
+                    document.getElementById('search').value = "";
+                    this.searchProducts("");
+                    this.showProducts(productList);
                     Swal.fire({
                         title: 'Deleted!',
                         text: 'The selected product has been deleted.',
@@ -217,7 +221,6 @@ var pManger = {
             cancelButtonText: 'No, cancel!'
         }).then((result) => {
             if (result.isConfirmed) {
-                // ? Determine the list to operate on
                 let productList = this.foundedItems.length > 0 ? this.foundedItems : this.pList;
                 // ? Remove checked products from the list
                 productList = productList.filter(product => !this.checkedList.includes(product));
@@ -241,7 +244,7 @@ var pManger = {
                 document.getElementById('delSelectBtn').classList.add('disabled');
                 Swal.fire({
                     title: 'Deleted!',
-                    text: 'The selected product has been deleted.',
+                    text: 'The selected products have been deleted.',
                     icon: 'success',
                     background: '#121013ce',
                     color: 'white',
@@ -250,18 +253,20 @@ var pManger = {
                     timer: 1500
                 });
             } else {
-                this.che
+                this.checkedList = [];
+                document.getElementById('delSelectBtn').classList.add('disabled');
             }
         });
     },
     //! *******************************Update & Edit Product****************************
     //? pull all products values from showProducts and put them in updateInputValue 
     pullUpdateValue: function (currentIndex) {
-        let productToUpdate = this.pList.find(product => product.id === currentIndex);
+        let productList = this.foundedItems.length > 0 ? this.foundedItems : this.pList;
+        let productToUpdate = productList.find(product => product.id === currentIndex);
         this.updateInputValue(productToUpdate);
         this.addBtn.classList.add("d-none");
         this.updateBtn.classList.replace("d-none", "d-block");
-        this.indexing = this.pList.indexOf(productToUpdate);
+        this.indexing = productList.indexOf(productToUpdate);
     },
     //? push new product values to pList and send new plist to showProducts and localStorage then clear inputs fields 
     pushUpdateValue: function () {
@@ -280,17 +285,20 @@ var pManger = {
                 cancelButtonText: 'No, cancel!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.pList[this.indexing].pName = this.productName.value;
-                    this.pList[this.indexing].pPrice = this.productPrice.value;
-                    this.pList[this.indexing].pCategory = this.productCategory.value;
-                    this.pList[this.indexing].pDescription = this.productDescription.value;
-                    this.pList[this.indexing].pLastUpdate = this.currentMoment();
+                    let productList = this.foundedItems.length > 0 ? this.foundedItems : this.pList;
+                    productList[this.indexing].pName = this.productName.value;
+                    productList[this.indexing].pPrice = this.productPrice.value;
+                    productList[this.indexing].pCategory = this.productCategory.value;
+                    productList[this.indexing].pDescription = this.productDescription.value;
+                    productList[this.indexing].pLastUpdate = this.currentMoment();
+                    this.showProducts(productList);
                     this.addProductStorage(this.pList);
-                    this.showProducts(this.pList);
                     this.updateInputValue();
                     this.addBtn.classList.replace("d-none", "d-block");
                     this.updateBtn.classList.replace("d-block", "d-none");
                     this.clearValidation();
+                    this.showProducts(this.pList); // Update the table to display all products
+                    this.searchProducts(this.searchTermValue);
                     Swal.fire({
                         title: 'Saved!',
                         text: 'The changes have been saved.',
